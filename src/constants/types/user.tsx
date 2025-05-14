@@ -4,6 +4,8 @@ export interface User {
     username?: string,
     email?: string,
     address?: Address,
+    phone?: string,
+    website?: string,
 }
 
 export type Address = {

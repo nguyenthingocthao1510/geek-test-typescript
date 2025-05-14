@@ -9,7 +9,7 @@ const contentStyle: React.CSSProperties = {
 
 const content = <div style={contentStyle} />;
 
-const App: React.FC = () => (
+const LoadingComponent: React.FC = () => (
     <Flex gap="middle" vertical>
         <Flex gap="middle">
             <Spin tip="Loading" size="small">
@@ -30,4 +30,4 @@ const App: React.FC = () => (
     </Flex>
 );
 
-export default App;
+export default LoadingComponent;

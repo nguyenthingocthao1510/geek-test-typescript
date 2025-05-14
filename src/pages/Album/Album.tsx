@@ -1,26 +1,23 @@
-import { Button, Flex, Modal, Space, theme } from 'antd'
-import { useEffect, useState } from 'react'
-import Table, { ColumnsType } from 'antd/es/table';
+import { Button, Flex, Space, Table, theme } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import './style.css'
-import { Album } from '../../constants/types/album';
-import usePagination from '../../hook/usePagination';
-import { useGetAlbums } from '../../helpers/album';
-import { User } from '../../constants/types/user';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetAllUser } from '../../helpers/user';
+import Title from 'antd/es/typography/Title';
+import { Album } from '../../constants/types/album';
+import { User } from '../../constants/types/user';
+import { useGetAlbums } from '../../helpers/album';
+import { useGetAllAlbumForUser } from '../../helpers/user';
+import usePagination from '../../hook/usePagination';
+import './style.css';
+import { ColumnsType } from 'antd/es/table';
 
 const AlbumPage = () => {
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-    const [selectedRecord, setSelectedRecord] = useState<Album | null>();
+    const [selectedRecord, setSelectedRecord] = useState<Album | null>(null);
 
     const { pagination, onPaginationChange } = usePagination<Album>({});
-
-    const { data } = useGetAlbums(pagination);
-
-    const onOpenModal = () => setIsOpenModal(true);
-    const { data: userData } = useGetAllUser();
-    const [userMap, setUserMap] = useState<Record<number, string>>({});
+    const { data: albumsData } = useGetAlbums(pagination);
+    const { data: userData } = useGetAllAlbumForUser();
 
     const navigate = useNavigate();
 
@@ -30,94 +27,78 @@ const AlbumPage = () => {
             dataIndex: 'id',
             width: 50,
             align: 'center',
-            render: (_, __, index) => {
+            render: (_: any, __: any, index: number) => {
                 const { pageNum = 1, pageSize = 10 } = pagination || {};
                 return (pageNum - 1) * pageSize + index + 1;
-            }
+            },
         },
         {
             title: 'Title',
             dataIndex: 'title',
-            width: 120,
+            width: 200,
         },
         {
             title: 'User',
             dataIndex: 'userId',
-            width: 120,
-            render: (id) => userMap[id],
+            width: 200,
+            render: (id: number) => {
+                const user = userData?.find((user: User) => user.id === id);
+                const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Unknown')}&background=random&rounded=true`;
+
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <img
+                            src={avatarUrl}
+                            alt={user?.name}
+                            style={{ width: 40, height: 40, borderRadius: '50%', marginRight: 10 }}
+                        />
+                        <a href={`/users/${user?.id}`} style={{ textDecoration: 'none', color: '#1890ff' }}>
+                            {user?.name || 'Unknown'}
+                        </a>
+                    </div>
+                );
+            },
         },
         {
             title: 'Action',
-            align: 'center',
             fixed: 'right',
-            width: 50,
-            render: (_, record: Album) => {
-                return (
-                    <Flex justify='center'>
-                        <Button type='default' onClick={() => {
-                            navigate(`/albums/${record.id}`)
-                        }}
-                            icon={<EyeOutlined />}
-                            size='small'
-                        >Show</Button>
-                    </Flex>
-                )
-            }
+            align: 'center',
+            width: 100,
+            render: (_: any, record: Album) => (
+                <Flex justify="center">
+                    <Button
+                        type="default"
+                        onClick={() => navigate(`/albums/${record.id}`)}
+                        icon={<EyeOutlined />}
+                        size="small"
+                    >
+                        Show
+                    </Button>
+                </Flex>
+            ),
         },
-    ]
-
-    useEffect(() => {
-        if (userData && userData) {
-            const userMap = (userData as User[]).reduce((acc: Record<number, string>, user: User) => {
-                if (user.id) {
-                    acc[user.id] = user.name || 'Unknown';
-                }
-                return acc;
-            }, {});
-            setUserMap(userMap);
-        }
-    }, [userData]);
-
-
-
+    ];
 
     return (
-        <>
-            <Space direction='vertical' style={{ width: '100%', padding: '1rem' }}>
-                <Table
-                    bordered={true}
-                    columns={columns}
-                    dataSource={data?.map((album: any) => ({
-                        ...album,
-                        key: album.id,
-                    })) || []}
-                    pagination={{
-                        current: pagination.pageNum,
-                        total: data?.totalElements || 0,
-                        pageSize: pagination.pageSize,
-                        onChange: onPaginationChange,
-                    }}
-                    loading={!data}
-                />
-            </Space>
-            {/* <Modal
-                title="Album Details"
-                open={isOpenModal}
-                onCancel={onCloseModal}
-                onOk={onCloseModal}
-            >
-                <Table
-                    bordered={true}
-                    columns={columns}
-                    dataSource={data?.map((album: any) => ({
-                        ...album,
-                        key: album.id,
-                    })) || []}
-                    loading={!data}
-                />
-            </Modal> */}
-        </>
-    )
-}
+        <Space direction="vertical" style={{ width: '100%', padding: '1rem' }}>
+            <Title level={3}>Albums</Title>
+            <Table
+                bordered
+                columns={columns}
+                dataSource={albumsData?.map((album: Album) => ({
+                    ...album,
+                    key: album.id,
+                })) || []}
+                pagination={{
+                    current: pagination.pageNum,
+                    total: albumsData?.totalElements || 0,
+                    pageSize: pagination.pageSize,
+                    onChange: onPaginationChange,
+                }}
+                loading={!albumsData}
+            />
+        </Space>
+    );
+};
 
-export default AlbumPage
+export default AlbumPage;

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Layout, Menu, theme } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { albumRoute, userRoute } from '../routes/routes.contants';
+import logo from '../logo.svg';
 
 const { Header, Sider, Footer } = Layout;
 
@@ -27,7 +28,7 @@ const Homepage: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <Layout>
             <Header style={{ display: 'flex', alignItems: 'center', background: 'white' }}>
-                <div className="demo-logo" />
+                <img src={logo} alt="Logo" style={{ height: '50px' }} />
             </Header>
             <Layout>
                 <Sider width={200} style={{ background: colorBgContainer }}>
@@ -44,7 +45,7 @@ const Homepage: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         {children}
                     </div>
                     <Footer style={{ textAlign: 'center' }}>
-                        Created by dqv@gmail.com
+                        Created by ntnthao15102002@gmail.com
                     </Footer>
                 </Layout>
             </Layout>
