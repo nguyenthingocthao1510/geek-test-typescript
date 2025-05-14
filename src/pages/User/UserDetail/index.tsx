@@ -1,12 +1,10 @@
 import { UnorderedListOutlined, ArrowLeftOutlined, EyeOutlined } from '@ant-design/icons';
 import { Breadcrumb, Space, Button, Card, Typography } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetAlbumById, useGetAlbums } from '../../../helpers/album';
+import { useGetAlbums } from '../../../helpers/album';
 import { useGetAllAlbumForUser, useGetUserById } from '../../../helpers/user';
-import { useState } from 'react';
 import Table, { ColumnsType } from 'antd/es/table';
 import { Album } from '../../../constants/types/album';
-import { User } from '../../../constants/types/user';
 import usePagination from '../../../hook/usePagination';
 import { useGetAvatarForUser } from '../../../helpers/avatar';
 

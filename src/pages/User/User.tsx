@@ -1,5 +1,5 @@
 import { Button, Flex, Modal, Space, theme } from 'antd'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Table, { ColumnsType } from 'antd/es/table';
 import { EyeOutlined } from '@ant-design/icons';
 import './style.css'

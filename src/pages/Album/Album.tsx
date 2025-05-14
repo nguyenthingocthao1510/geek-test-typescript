@@ -1,6 +1,5 @@
 import { Button, Flex, Space, Table, theme } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import { Album } from '../../constants/types/album';
@@ -12,9 +11,6 @@ import './style.css';
 import { ColumnsType } from 'antd/es/table';
 
 const AlbumPage = () => {
-    const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-    const [selectedRecord, setSelectedRecord] = useState<Album | null>(null);
-
     const { pagination, onPaginationChange } = usePagination<Album>({});
     const { data: albumsData } = useGetAlbums(pagination);
     const { data: userData } = useGetAllAlbumForUser();

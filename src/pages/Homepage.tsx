@@ -1,4 +1,3 @@
-// src/layouts/Default.tsx
 import React, { useEffect, useState } from 'react';
 import { Layout, Menu, theme } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
