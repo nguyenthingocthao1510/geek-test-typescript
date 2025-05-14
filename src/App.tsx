@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import { publicProtectedFlattenRoutes } from './routes';
+import Homepage from './pages/Homepage';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+const App = () => {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        {publicProtectedFlattenRoutes.map((route, idx) => (
+          <Route
+            key={idx}
+            path={route.path}
+            element={<Homepage>{route.element}</Homepage>}
+          />
+        ))}
+      </>
+    )
   );
-}
+
+  return <RouterProvider router={router} />;
+};
 
 export default App;
